@@ -1,0 +1,102 @@
+{% extends 'ed/base.html' %}
+{% block content %}
+
+{% comment %} {{post_results}}
+{{category_results}}
+{{user_results}} {% endcomment %}
+
+
+<div class="container " >
+
+
+
+
+{% if post_results %}
+
+<h2 style="text-align:center">Post results</h2>
+<div class="row " >
+{% for p in post_results %}
+  <div class="col" style="display:flex;justify-content:center;">
+    <div class="card" style="margin:1rem;width:20rem;box-shadow:0px 0px 12px rgba(0, 0, 0,0.2);border-radius:8px;">
+    <a href="{% url 'details' p.id %}" style="text-decoration: none;color:black;">
+      <img src="{{p.coverimage.url}}" class="card-img-top" alt="{{p.title}}" style="max-height: 200">
+      <div class="card-body">
+        <h5 class="card-title">{{p.title}}</h5>
+    
+        <p class="text-muted" style="font-weight:400"><img src="{{p.Author.profile.profile_image.url}}" id="authors-image">
+        <span style="letter-spacing:1.2px">{{p.Author}}</span>,
+        {{p.created_on.date}}</p>
+
+      </div>
+      </a>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+
+
+{% if category_results %}
+
+
+<hr>
+
+<h1 style="text-align:center">Categories Results</h1>
+<div class="row">
+
+{% for cat in category_results %}
+
+<div class="col" style="display:flex;justify-content:center;">
+
+<a href="{% url 'category' cat.id %}" style="text-decoration:none;color:rgba(0,0,0,0.7);">
+<div class="categories">
+{{cat}}
+
+</div>
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+
+
+
+{% if user_results %}
+
+
+<hr>
+<h1 style="text-align:center">Users</h1>
+<p style="padding:1rem"></p>
+<div class="row">
+
+{% for u in user_results %}
+
+<div class="col" style="display:flex;justify-content:center;">
+
+<a href="{% url 'user_detail' u.username %}" style="text-decoration:none;color:rgba(0,0,0,0.7);">
+<div class="users_list">
+<img src="{{u.profile.profile_image.url}}"  id="search_profile_image" alt="No profile image">
+<p>{{u.username}}</p>
+
+</div>
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+
+</div>
+{% endblock content %}

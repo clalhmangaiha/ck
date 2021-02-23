@@ -1,0 +1,129 @@
+:root{
+    font-size: 14px;
+}
+
+.containers{
+    margin:2rem;
+    
+}
+.rows{
+   
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+ 
+
+    
+}
+
+.columns{
+  margin:1rem;
+   
+}
+.cards-body{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 5px rgba(0,0,0, 0.2);
+    margin: 0 5px 0 5px;
+   
+}
+#cards_image{
+    width:40vh;
+    max-width: 40vh;
+    min-width: 30vh;
+    height: auto;
+    max-height: 23vh;
+    border-top-left-radius:5px;
+    border-top-right-radius: 5px;
+   
+
+}
+.cards-body{
+    border:1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cards-body .cards-title{
+    padding: 0rem 1rem 0 1rem;
+    font-weight:bold;
+    font-size:20px;
+    max-width: 30vh;
+
+    color:black;
+   
+}
+.cards-body .cards-text{
+    padding:0 0 0 1rem;
+    font-size: 14px;
+    font-weight:100;
+    display: flex;
+    align-items: center;
+    color:black;
+
+    
+
+}
+#texts-links{
+    text-emphasis: none;
+    text-decoration: none;
+}
+#authors-image{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+.cards-body .cards-date{
+    padding:0 0 0 1rem;
+    font-size: 11px;
+    color: rgba(0,0,0, 0.7);
+    
+
+    font-weight:lighter;
+
+}
+
+
+/* 
+.input_comment{
+    border:0;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    width: 30vw;
+}
+.input_comment:focus{
+    outline:none;
+    border-bottom: 2px solid rgba(0,0,0,0.4);
+    width: 35vw;
+    transition-timing-function:ease-in-out;
+    transition-delay:0.2s ;
+    transition-duration:0.5s;
+
+
+}
+
+.submit{
+    background-color: blue;
+    color:white;
+    border: none;
+    width: 100px;
+    height: 30px;
+    letter-spacing:2px;
+    font-size:14px;
+    
+}
+
+.submit:hover{
+    width: 108px;
+    height: 35px;
+    box-shadow: 1px 1px 5px rgba(0,0,0, 0.5);
+    font-size:16px;
+    transition-duration:0.5s ;
+
+} */
+.card:hover{
+    transform: scale(1.1,1.1);
+    transition-duration:0.5s ;
+    transition-timing-function: ease-in-out;
+}

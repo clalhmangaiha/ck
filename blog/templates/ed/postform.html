@@ -1,0 +1,103 @@
+
+{% extends 'ed/base.html' %}
+{% load static %}
+
+{% block content %}
+{% comment %} <div class="container">
+{% if user.is_authenticated %}
+
+<form method="POST" enctype="multipart/form-data" novalidate>
+{% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <input type="submit"/>
+</form>
+
+{% endif %}  
+
+
+</div>   {% endcomment %}
+{% comment %} <style>
+
+input[type="text"]{
+    outline: none;
+    border:0;
+    border-bottom:1px solid #ccc;
+    width:250px;
+    font-family:monospace;
+    letter-spacing:2px;
+    font-size:18px;
+}
+
+#coverimage{
+    
+    border:0;
+    outline:none;
+    color:grey;
+    font-size:18px;
+    border-radius:4px;
+}
+#submit{
+    margin:1rem;
+    width:10rem;
+    height:2rem;
+    background-color:blue;
+    border:0;
+    color:white;
+    letter-spacing:2px;
+}
+
+</style> {% endcomment %}
+
+<div class="container" >
+<h3 style="text-align:center;padding:2rem;">Create a new post</h3>
+{% if user.is_authenticated %}
+<form method="POST"  enctype="multipart/form-data" novalidate>
+{% csrf_token %}
+    <link href="/static/django_ckeditor_5/dist/styles.css" type="text/css" media="all" rel="stylesheet">
+<link href="/static/this.css" type="text/css" media="all" rel="stylesheet">
+<script src="/static/django_ckeditor_5/dist/bundle.js"></script>
+   <input type="text" class="form-control form-control-lg" id="title" name="title" maxlength="500" required id="id_title" placeholder="Title" />
+ <p></p>
+ <input type="text" class="form-control" name="intro" maxlength="200" required id="id_intro" placeholder="Intro" />
+{% comment %} <label for="id_category">Category:</label>  {% endcomment %}
+<p></p>
+<p><select class="form-select" name="category" id="category" required id="id_category"  >
+  <option selected>Category:</option>
+  <option value="1">GOSPEL</option>
+
+  <option value="2">this</option>
+
+  <option value="3">asdf</option>
+
+</select></p>
+{% comment %} <p><label for="id_coverimage" style="font-family:monospace;">Coverimage:</label>
+ <input type="file" id="coverimage" name="coverimage" accept="image/*" required id="id_coverimage"></p> {% endcomment %}
+
+<div class="input-group mb-3">
+  <input type="file" class="form-control" id="inputGroupFile02" name="coverimage" accept="image/*" required>
+  <label class="input-group-text" for="inputGroupFile02">Coverimage</label>
+</div>
+
+<p><label for="id_content"></label> <textarea  name="content" class="django_ckeditor_5" required id="id_content">
+</textarea>
+
+<script id="id_content_script" type="application/json">{"toolbar": ["heading", "|", "outdent", "indent", "|", "bold", "italic", "link", "underline", "strikethrough", "code", "subscript", "superscript", "highlight", "|", "bulletedList", "numberedList", "todoList", "|", "blockQuote", "imageUpload", "|", "fontSize", "fontFamily", "fontColor", "fontBackgroundColor", "mediaEmbed", "removeFormat", "insertTable"], "blockToolbar": ["paragraph", "heading1", "heading2", "heading3", "|", "bulletedList", "numberedList", "|", "blockQuote", "imageUpload"], "image": {"toolbar": ["imageTextAlternative", "imageTitle", "|", "imageStyle:alignLeft", "imageStyle:full", "imageStyle:alignRight", "imageStyle:alignCenter", "imageStyle:side", "|"], "styles": ["full", "side", "alignLeft", "alignRight", "alignCenter"]}, "table": {"contentToolbar": ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"], "tableProperties": {"borderColors": [{"color": "hsl(4, 90%, 58%)", "label": "Red"}, {"color": "hsl(340, 82%, 52%)", "label": "Pink"}, {"color": "hsl(291, 64%, 42%)", "label": "Purple"}, {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"}, {"color": "hsl(231, 48%, 48%)", "label": "Indigo"}, {"color": "hsl(207, 90%, 54%)", "label": "Blue"}], "backgroundColors": [{"color": "hsl(4, 90%, 58%)", "label": "Red"}, {"color": "hsl(340, 82%, 52%)", "label": "Pink"}, {"color": "hsl(291, 64%, 42%)", "label": "Purple"}, {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"}, {"color": "hsl(231, 48%, 48%)", "label": "Indigo"}, {"color": "hsl(207, 90%, 54%)", "label": "Blue"}]}, "tableCellProperties": {"borderColors": [{"color": "hsl(4, 90%, 58%)", "label": "Red"}, {"color": "hsl(340, 82%, 52%)", "label": "Pink"}, {"color": "hsl(291, 64%, 42%)", "label": "Purple"}, {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"}, {"color": "hsl(231, 48%, 48%)", "label": "Indigo"}, {"color": "hsl(207, 90%, 54%)", "label": "Blue"}], "backgroundColors": [{"color": "hsl(4, 90%, 58%)", "label": "Red"}, {"color": "hsl(340, 82%, 52%)", "label": "Pink"}, {"color": "hsl(291, 64%, 42%)", "label": "Purple"}, {"color": "hsl(262, 52%, 47%)", "label": "Deep Purple"}, {"color": "hsl(231, 48%, 48%)", "label": "Indigo"}, {"color": "hsl(207, 90%, 54%)", "label": "Blue"}]}}, "heading": {"options": [{"model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph"}, {"model": "heading1", "view": "h1", "title": "Heading 1", "class": "ck-heading_heading1"}, {"model": "heading2", "view": "h2", "title": "Heading 2", "class": "ck-heading_heading2"}, {"model": "heading3", "view": "h3", "title": "Heading 3", "class": "ck-heading_heading3"}]}}</script></p>
+ <input type="text" class="form-control" name="tags" id="id_tags" placeholder="Tags:separated by commas" style="font-size:10px;"> 
+<br>
+<button id="submit" class="btn btn-primary "  type="submit">POST</button>
+</form>
+{% endif %}
+
+
+</div> 
+
+
+
+
+
+{% endblock content %}
+
+
+
+

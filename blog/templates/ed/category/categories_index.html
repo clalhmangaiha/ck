@@ -1,0 +1,27 @@
+{% extends 'ed/base.html' %}
+{% block content %}
+
+
+<div class="container">
+<h1 style="text-align:center">Categories</h1>
+<p style="padding:2rem"></p>
+<div class="row">
+
+{% for cat in categories %}
+
+<div class="col">
+
+<a href="{% url 'category' cat.id%}" style="text-decoration:none;color:rgba(0,0,0,0.7);">
+<div class="categories">
+{{cat}}
+
+</div>
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+{% endblock content %}

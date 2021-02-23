@@ -1,0 +1,364 @@
+{% extends 'ed/base.html' %} 
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/details.css'%}">
+
+{% block content %}
+
+<div class="container">
+ {% comment %} {{counter}} {% endcomment %}
+  {% if details.Author == user %}
+
+
+  {% comment %} <a href="{% url 'delete' details.id %}" style="padding:5px; text-decoration:none;"><i class="far fa-trash-alt"></i>DELETE</a> {% endcomment %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-light" style="color:#0d6efd" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <i class="far fa-trash-alt"></i> DELETE
+</button>
+  <a href="{% url 'edit' details.id %}"   type="button" class="btn btn-primary" style="padding:5px; text-decoration:none;"><i class="fas fa-edit"></i>EDIT</a>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete {{details.title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the post?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+        <a href="{% url 'delete' details.id %}" style="padding:5px; text-decoration:none;" type="button" class="btn btn-primary">Yes</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  {% endif %}
+<div style="margin:8px 0 0 8px">
+  <h1 id="details-title">{{details.title}}</h1>
+  <div class="details-author">
+  <a href="{% url 'user_detail' details.Author %}" style="text-decoration:none">
+    <img
+      src="{{details.Author.profile.profile_image.url}}"
+      id="details-author-image"
+    />
+    </a>
+
+    <div class="details-author-name">
+    <p></p>
+      <p id="details-text">{{details.Author.username}}</p>
+      <p id="details-text">{{details.created_on.date}}</p>
+    </div>
+
+  <div style="align-items: center;padding:18px;" class="float-right ">
+  {% if user.is_authenticated %}
+{% comment %} <div class="bookmarking"> {% endcomment %}
+{% if bookmarked %}
+<a class="unbookmark" type="button" data-catid={{details.id}} style="text-decoration:none;color:black"><i id="unsave" class="fas fa-bookmark"></i>  </a>
+{% else %}
+<a class="bookmark"  type="button" data-catid={{details.id}} style="text-decoration:none;color:black;"><i id="save" class="far fa-bookmark"></i>  </a>
+{% comment %} </div> {% endcomment %}
+{% endif %}
+
+{% endif %}
+  </div>
+
+  </div>
+ </div>
+
+<!-- BOOKMARK-->
+{% comment %} {% if bookmarked %}
+<a href="{% url 'bookmark' details.id %}" style="text-decoration:none;color:black"><i class="fas fa-bookmark"></i>  Unsave</a>
+{% else %}
+<a href="{% url 'bookmark' details.id %}" style="text-decoration:none;color:black"><i class="far fa-bookmark"></i>  Save</a>
+
+{% endif %}  {% endcomment %}
+{% comment %} {% if user.is_authenticated %}
+<div class="bookmarking">
+{% if bookmarked %}
+<a class="unbookmark" type="button" data-catid={{details.id}} style="text-decoration:none;color:black"><i id="unsave" class="fas fa-bookmark"></i>  </a>
+{% else %}
+<a class="bookmark"  type="button" data-catid={{details.id}} style="text-decoration:none;color:black;"><i id="save" class="far fa-bookmark"></i>  </a>
+</div>
+{% endif %}
+
+{% endif %}  {% endcomment %}
+
+
+<div class="share" style="padding:5px;display:flex;align-items:center;margin-top:15px;">
+<span style="letter-spacing:2px;font-family:PlayFair"><i>Share </i></span>
+<i class="fab fa-whatsapp  fa-lg" style="padding:0 5px 0 5px"> </i>
+<i class="fab fa-facebook  fa-lg" >  </i>
+</div>
+
+
+<p style="padding:1vw;"></p>
+  {% if details.coverimage %}
+  <img class="container" src="{{ details.coverimage.url}}" class="coverimage" />
+  {% else %}
+  <div class="coverimage">
+    <h1 id="details-title">{{details.title}}</h1>
+  </div>
+  {% endif %} 
+
+
+<div class="content"> 
+<p></p>
+  {{details.content|safe}} 
+ </div>
+
+
+
+  <br>
+
+<div class="post_category">
+<span>Category:</span>
+{% comment %} {{details.category.all}}  {% endcomment %}
+{% for cat in  details.category.all %}
+{% if cat.categoryimage %}
+<a href="{% url 'category' cat.id %}"type="button" class="btn btn-light">
+<img src="{{cat.categoryimage.url}}" height=20 width=20> {{cat.name}}</a>
+{% else %}
+{{cat.name}}
+{% endif %}
+{% endfor %}
+</div>
+  {% if details.tags %}
+  <div class="tags">
+  <span style="color:black;">tags:</span> {% for t in details.tags.all %}
+  #{{t}} {% endfor %} 
+  </div>
+  {% endif %}
+{% if related %}
+  <p id="relates" style="font-family:Open Sans;">RELATED </p>
+{% endif %}
+  <div class="related">
+    {% comment %} <div class="rows">
+      {% for r in related %}
+
+      <div class="columns">
+        <div class="cards-body" style="max-height:">
+          <a href="{% url 'details' r.id %}" id="texts-links">
+            <img src="{{r.coverimage.url}}" id="cards_image" />
+
+            <p class="cards-title">{{r.title}}</p>
+            <p class="cards-text">
+              <img
+                src="{{r.Author.profile.profile_image.url}}"
+                id="authors-image"
+              />
+              {{r.Author}}
+              <span class="cards-date">{{r.created_on.date}}</span>
+            </p>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div> {% endcomment %}
+
+
+<div class="row " >
+
+{% for p in related %}
+  <div class="col " style="display:flex;justify-content:center;" >
+    <div class="card" style="margin:1rem;width:20rem;box-shadow:0px 0px 12px rgba(0, 0, 0,0.2);border-radius:8px;">
+    <a href="{% url 'details' p.id %}" style="text-decoration: none;color:black;">
+      <img src="{{p.coverimage.url}}" class="card-img-top" alt="{{p.title}}" style="max-height: 200">
+      <div class="card-body">
+        <h5 class="card-title" style="letter-spacing:1.2px">{{p.title}}</h5>
+        <p class="text-muted" style="font-weight:400"><img src="{{p.Author.profile.profile_image.url}}" id="authors-image">
+        <span style="letter-spacing:1.2px">{{p.Author}}</span>,
+        {{p.created_on.date}}</p>
+
+      </div>
+      </a>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+
+</div>
+
+
+
+
+
+    
+    
+<br/>
+<div class="comments container-fluid">
+    {{comments.count}} COMMENTS 
+    {% if user.is_authenticated %}
+    <form action="{% url 'comment' details.id %}" method="post" class="row g-1 ">
+      {% csrf_token %}
+      <div class="col">
+      <textarea class="form-control" class="input_comment" name="comment" type="text"  /></textarea>
+      </div>
+      <div class="col-sm">
+      <button type="submit" class="btn btn-primary">comment</button>
+      </div>
+    </form>
+    {% else %}
+    <a href="/users/accounts/login" style="color:grey" >Login to Comment</a>
+    {% endif %} 
+    {% for c in comments %} 
+    <div class="comment-list">
+    <div class="comment-individually">
+    <div class="comment-image">
+    <img
+      src="{{c.commenter.profile.profile_image.url}}"
+      id="details-author-image"
+    />
+    </div>
+    <div class="comment-content">
+    
+    <span id="commenter"><b>{{c.commenter}}</b> {{c.commented_on.date}}</span>
+    <p id="comment-text">{{c.comment}} </p>
+    {% if c.commenter == request.user %} 
+
+<!-- DELETE -->
+<a id="comment-edit-delete"type="button" data-bs-toggle="modal" data-bs-target="#deletecomment">
+  Delete
+</a>
+
+<!-- Modal -->
+<div class="modal fade" id="deletecomment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete comment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       Are you sure you want to delete?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="{% url 'deletecomment' c.id %}" class="btn btn-primary">Delete Comment</a>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+    <!-- EDITCOMMENT -->
+<button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editcomment{{c.id}}">
+  Edit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="editcomment{{c.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit comment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'editcomment' c.id %}" >
+        {% csrf_token %}
+        <input class="form-control form-control-lg" class="input_comment" name="comment" type="text" value="{{ c.comment}}"/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+
+    
+   {% endif %}
+    </div>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"> 
+$('.bookmark').click(function(){ 
+
+
+var id; 
+id = $(this).attr("data-catid"); 
+console.log("hello");
+console.log(id);
+var link = "bookmark/".concat(id);
+
+
+$.ajax({ 
+ 
+    url: link, 
+    data:{id:id}, 
+    
+    
+success: function(data) 
+{ 
+  $("#unsave").removeClass("far fa-bookmark");
+  
+   
+  $("#save").addClass("fas fa-bookmark");
+ 
+    
+}
+     }) 
+     });
+
+</script>
+
+<script type="text/javascript">
+
+$('.unbookmark').click(function(){ 
+
+
+var id; 
+id = $(this).attr("data-catid"); 
+console.log("hello");
+console.log(id);
+var link = "bookmark/".concat(id);
+
+
+$.ajax({ 
+ 
+    url: link, 
+    data:{id:id}, 
+    
+    
+success: function(data) 
+{ 
+  $("#unsave").removeClass("fas fa-bookmark");
+   
+  $("#unsave").addClass("far fa-bookmark");
+  
+
+    
+}
+     }) 
+     });
+
+
+
+
+     
+     </script>
+
+  {% endblock content %}
+</div>

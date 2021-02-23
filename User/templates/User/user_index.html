@@ -1,0 +1,11 @@
+
+{% extends 'ed/base.html' %}
+{% block content %}
+{% for u in users %}
+<a href="{% url 'user_detail' u %}">
+{{u.name}}
+
+</a>
+{% endfor %}
+
+{% endblock content %}

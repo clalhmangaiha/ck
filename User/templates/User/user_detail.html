@@ -1,0 +1,126 @@
+{% extends 'ed/base.html' %}
+
+{% block content %}
+<style>
+.overlay {
+    background-image:url({{profile.cover_photo.url}});
+     background-position: center;
+     background-size: cover;
+    postion:relative;
+    height: 30vh;
+}
+.profile {
+   postion: absolute;
+   z-index:2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.profilephoto {
+   margin-top: 10vh;
+    
+    height: 30vh;
+    width: auto;
+    border-radius: 50%;
+    border: 4px solid white;
+   
+
+}
+.follow {
+    position: relative;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.followers{
+    margin:0 2px 0 5px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.profile_content{
+    position: relative;
+    display: block;
+    top:40vh;
+}
+</style>
+<div class="container">
+<div class="overlay">
+
+{% comment %} <img src={{profile.cover_photo.url}}  width=auto><br> {% endcomment %}
+<div class="profile">
+<img class="profilephoto" src={{profile.profile_image.url}} height=50 width=50>
+{% if user.is_authenticated %}
+{% if profile.name == user %}
+{% else %}
+{% if follow_status %}
+<a class="btn btn-outline-secondary" href="{% url 'follow' profile.name.id %}">UNFOLLOW</a>
+{% else %}
+<a class="btn btn-primary" href="{% url 'follow' profile.name.id %}">FOLLOW</a>
+
+{% endif %}
+{% endif %}
+{% else %}
+<a class="btn btn-primary" href="/users/accounts/login">Login to Follow</a>
+{% endif %}<br>
+<strong>{{profile.name.username}}</strong><br>
+<p id="bio" style="text-align:center">{{profile.bio}}</p>
+<div class="follow">
+<div class="followers">
+<strong>{{followers.count}}</strong>
+<span style="font-size:11px;font-weight:100;">Followers</span>
+</div>
+<div class="followers">
+<strong>{{following}}</strong>
+<span style="font-size:11px;font-weight:100;">Following</span>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="profile_content" style="display:flex;justify-content:center;">
+
+<hr>
+<br>
+
+{% comment %} Posts:</br> {% endcomment %}
+
+<div class="row " >
+<p></p>
+<hr>
+<p style="padding:6px ; text-align:center;letter-spacing:2px"> Posts</p>
+
+
+{% for p in posts %}
+  <div class="col " style="display:flex;justify-content:center;" >
+    <div class="card" style="margin:1rem;width:20rem;box-shadow:0px 0px 12px rgba(0, 0, 0,0.2);border-radius:8px;">
+    <a href="{% url 'details' p.id %}" style="text-decoration: none;color:black;">
+      <img src="{{p.coverimage.url}}" class="card-img-top" alt="{{p.title}}" style="max-height: 200">
+      <div class="card-body">
+      {% for cat in p.category.all %}
+      
+     
+      <span class="btn btn-primary btn-sm" style="border-radius:30px;margin:5px 0 5px 0;">{{cat}}</span>
+      {% endfor %}
+        <h5 class="card-title" style="letter-spacing:1.2px">{{p.title}}</h5>
+      
+      
+        <p class="text-muted">{{p.created_on.date}}</p>
+
+      </div>
+      </a>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+
+</div>
+</div>
+{% endblock content %}
