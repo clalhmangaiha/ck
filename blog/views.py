@@ -4,8 +4,94 @@ from .models import Post,Comment,Bookmark,Activity,Category
 from .forms import PostForm,EditPostForm
 from django.db.models import Q
 from django.contrib.auth.models import User
+
 # from django.contrib.auth.admin import 
 # Create your views here.
+from .serializers import PostSerializer
+from rest_framework.response import Response
+from rest_framework import generics,status
+
+from rest_framework.decorators import api_view
+@api_view(['GET'])
+def api_post_index(request):
+    if request.method == 'GET':
+        post = Post.objects.all()
+        serializer = PostSerializer(post,many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def api_post_detail(request,slug):
+
+    try:
+        post = Post.objects.get(slug=slug)
+
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        
+        print("SLUG",post)
+        serializer= PostSerializer(post)
+        return Response(serializer.data)
+
+@api_view(['PUT'])
+def api_post_edit(request,slug):
+
+    try:
+        post = Post.objects.get(slug=slug)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer= PostSerializer(post,data = request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+            data["success"] = "Post update success"
+            return Response(data=data)
+        
+        return Response(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def api_post_delete(request,id):
+    try:
+        post = Post.objects.get(id=id)
+    except Post.DoesNotExist:
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        operations = post.delete()
+        data={}
+        if operations:
+            data["success"] = "Deleted Successfully"
+        else:
+            data["failure"] = "Deletion failure"
+        return Response(data=data)
+
+@api_view(['POST'])
+def api_post_create(request):
+    user = request.user
+    post = Post(Author=user)
+
+    if request.method == 'POST':
+        serializer = PostSerializer(post,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status = status.HTTP_201_CREATED)
+        return Response(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+
+
+class PostList(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        print("QUERY",queryset)
+        serializer = PostSerializer(queryset,many=True)
+        print("Serializer",serializer)
+        return Response(serializer.data) 
 
 def index(request):
     posts = Post.objects.all()

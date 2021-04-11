@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+
     'django_ckeditor_5',
     'taggit',
     'blog',
     'User',
+
 ]
 LOGIN_REDIRECT_URL = '/'
 
@@ -216,3 +219,12 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+APPEND_SLASH = False

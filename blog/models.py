@@ -9,6 +9,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from django.utils.text import slugify
 # from modelcluster.fields import ParentalManyToManyField
 
 # Create your models here.
@@ -25,21 +26,28 @@ class Post(models.Model):
     Author = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     created_on = models.DateTimeField(auto_now_add=True,null=True)
     title = models.CharField(max_length=500,null=True)
+    slug = models.SlugField(max_length=500,null=True,blank=True)
     coverimage = models.ImageField(upload_to='image/',null=True)
     
     
 
     intro = models.CharField(max_length=200,null=True)
-    category = models.ManyToManyField(Category,related_name='categories')
+    category = models.ManyToManyField(Category,related_name='categories',null=True)
     content = CKEditor5Field('Text', config_name='extends')
     tags = TaggableManager(blank=True)
+
+    def save(self, *args, **kwargs):
+        # if not self.slug:
+        self.slug = slugify(self.title)
+        
+        super(Post,self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.title} - {self.Author.username}'
 
-    def save_model(self, request, obj, form, change):
-        obj.added_by = request.user
-        super().save_model(request, obj, form, change)    
+    # def save_model(self, request, obj, form, change):
+    #     obj.added_by = request.user
+    #     super().save_model(request, obj, form, change)    
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='postcomments')
