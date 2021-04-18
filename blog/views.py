@@ -5,11 +5,14 @@ from .forms import PostForm,EditPostForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 
+
 # from django.contrib.auth.admin import 
 # Create your views here.
 from .serializers import PostSerializer
 from rest_framework.response import Response
 from rest_framework import generics,status
+
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.decorators import api_view
 @api_view(['GET'])
@@ -72,8 +75,13 @@ def api_post_delete(request,id):
 
 @api_view(['POST'])
 def api_post_create(request):
-    user = request.user
+    print(request.data)
+
+    # permission_classes = (IsAuthenticated,)
+    user_select = User.objects.get(username="admin")
+    user = user_select
     post = Post(Author=user)
+    # post.category = {'1'}
 
     if request.method == 'POST':
         serializer = PostSerializer(post,data=request.data)

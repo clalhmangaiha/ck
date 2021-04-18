@@ -27,13 +27,13 @@ class Post(models.Model):
     created_on = models.DateTimeField(auto_now_add=True,null=True)
     title = models.CharField(max_length=500,null=True)
     slug = models.SlugField(max_length=500,null=True,blank=True)
-    coverimage = models.ImageField(upload_to='image/',null=True)
+    coverimage = models.ImageField(upload_to='image/',null=True,blank=True)
     
     
 
     intro = models.CharField(max_length=200,null=True)
-    category = models.ManyToManyField(Category,related_name='categories',null=True)
-    content = CKEditor5Field('Text', config_name='extends')
+    category = models.ManyToManyField(Category,related_name='categories',null=True,blank=True)
+    content = CKEditor5Field('Text', config_name='extends',blank=True)
     tags = TaggableManager(blank=True)
 
     def save(self, *args, **kwargs):
