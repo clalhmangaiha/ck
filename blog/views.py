@@ -78,7 +78,7 @@ def api_post_create(request):
     print(request.data)
 
     permission_classes = (IsAuthenticated,)
-    user_select = User.objects.get(username="admin")
+    user = User.objects.get(username="admin")
  
     print(user)
     post = Post(Author=user)
