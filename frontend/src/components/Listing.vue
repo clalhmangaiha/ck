@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
-      <div class="row" v-for="post ,index in posts" :key="index">
+  <div class="container mx-auto px-4">
+      <div class="" v-for="post ,index in posts" :key="index">
 
-          <div class="col">
+          <div class="  ">
               <router-link :to="'/detail/'+post.slug">
               <Cards :title='post.title' :coverimage='post.coverimage'></Cards>
               </router-link>

@@ -77,9 +77,10 @@ def api_post_delete(request,id):
 def api_post_create(request):
     print(request.data)
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     user_select = User.objects.get(username="admin")
-    user = user_select
+ 
+    print(user)
     post = Post(Author=user)
     # post.category = {'1'}
 

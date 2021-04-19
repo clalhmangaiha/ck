@@ -4,27 +4,27 @@
       <input  type="text" v-model="title" /> 
       <input style="display:none" type="file" @change="onFileSelected" ref="fileinputting">
 
-      <button @click="$refs.fileinputting.click()">Pick File </button>
+      <button class="w-90 border" @click="$refs.fileinputting.click()">Pick File </button>
 
 
-    <!-- <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor> -->
+    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
     <button type="submit">Post</button>
         </form>
   </div>
 </template>
 
 <script>
-// import CKEditor from '@ckeditor/ckeditor5-vue2';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
 
-    axios.defaults.xsrfCookieName = 'csrftoken';
-    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
 export default {
   components: {
             // Use the <ckeditor> component in this view.
-            // ckeditor: CKEditor.component
+            ckeditor: CKEditor.component
         },
         data() {
             return {
@@ -32,11 +32,11 @@ export default {
                 newtitle:"",
                 coverimage:null,
                
-                // editor: ClassicEditor,
-                // editorData: {},
-                // editorConfig: {
-                //     // The configuration of the editor.
-                // }
+                editor: ClassicEditor,
+                editorData: {},
+                editorConfig: {
+                    // The configuration of the editor.
+                }
 
                 // ...
             };
@@ -47,6 +47,8 @@ export default {
                 const fd = new FormData();
                 fd.append('coverimage',this.coverimage,this.coverimage.name);
                 fd.append('title',this.title);
+                fd.append('content',this.editorData);
+
 
                 axios.post(`http://127.0.0.1:8000/api/v2/create/`,
                 // {
@@ -59,7 +61,7 @@ export default {
                 
                 )
                     .then(() =>{
-                       
+                       this.title = null
                   
                     })
                 .catch(error=>{
