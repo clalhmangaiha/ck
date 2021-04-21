@@ -17,6 +17,7 @@
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios'
+import store from '../store'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -48,6 +49,9 @@ export default {
                 fd.append('coverimage',this.coverimage,this.coverimage.name);
                 fd.append('title',this.title);
                 fd.append('content',this.editorData);
+                // fd.append('username',localStorage.getItem('username'));
+                fd.append('username',this.$store.state.username);
+                console.log(store.state.username)
 
 
                 axios.post(`http://127.0.0.1:8000/api/v2/create/`,

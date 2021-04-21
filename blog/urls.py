@@ -35,6 +35,9 @@ urlpatterns = [
     path('api/v2/edit/<slug>',views.api_post_edit,name='postedit'),
     path('api/v2/create/',views.api_post_create,name='postcreate'),
 
+    path('api/v2/bookmark/',views.bookmarkapi,name='bookmarkapi'),
+
+
 
 
 

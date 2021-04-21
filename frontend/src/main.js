@@ -7,8 +7,8 @@ import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 
-import jwt_decode from  'jwt-decode'
 import Vuex from 'vuex'
+import store from './store'
 
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -29,71 +29,73 @@ new Vue({
 // }).$mount('#app')
 
 
-const store = new Vuex.Store({
-  state:{
-    jwt:localStorage.getItem('t'),
-    endpoints:{
-      obtainJWT:'http://127.0.0.1:8000/api/token',
-      refreshJWT:'http://127.0.0.1:8000/api/token/refresh'
-    }
-  },
+// const store = new Vuex.Store({
+//   state:{
+//     jwt:localStorage.getItem('t'),
+//     username:'',
+//     endpoints:{
+//       obtainJWT:'http://127.0.0.1:8000/api/token/',
+//       refreshJWT:'http://127.0.0.1:8000/api/token/refresh'
+//     }
+//   },
 
-  mutations:{
-    updateToken(state,newToken){
-      localStorage.setItem('t',newToken);
-      state.jwt=newToken;
-    },
-    removeToken(state){
-      localStorage.removeItem('t');
-      state.jwt=null;
-    }
-  },
+//   mutations:{
+//     updateToken(state,newToken){
+//       localStorage.setItem('t',newToken.token);
+//       state.jwt=newToken.token;
+//       state.username =newToken.username
+//     },
+//     removeToken(state){
+//       localStorage.removeItem('t');
+//       state.jwt=null;
+//     }
+//   },
 
-  actions:{
+//   actions:{
 
-    obtainToken(username,password){
-      const payload = {
-        username:username,
-        password:password
-      }
+//     obtainToken(username,password){
+//       const payload = {
+//         username:username,
+//         password:password
+//       }
 
-      axios.post(this.state.endpoints.obtainJWT,payload)
-      .then(response =>{
-        this.commit('updateToken',response.data.token);
-      })
-      .catch(error =>{
-        console.log(error);
-      })
-    },
+//       axios.post(this.state.endpoints.obtainJWT,payload)
+//       .then(response =>{
+//         this.commit('updateToken',{token:response.data.token,username:payload.username});
+//       })
+//       .catch(error =>{
+//         console.log(error);
+//       })
+//     },
 
-    refreshToken(){
-      const payload = {
-        token:this.state.jwt
-      }
+//     refreshToken(){
+//       const payload = {
+//         token:this.state.jwt
+//       }
 
-      axios.post(this.state.endpoints.refreshJWT,payload)
-      .then(response =>{
-        this.commit('updateToken',response.data.token)
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-    },
-    inspectToken(){
-      const token = this.state.jwt;
-      if(token){
-        const decoded = jwt_decode(token);
-        const exp = decoded.exp
-        const orig_iat = decoded.orig_iat
-        if(exp - (Date.now()/1000) < 1800 && (Date.now()/1000) - orig_iat < 628200){
-          this.dispatch('refreshToken')
-        } else if (exp -(Date.now()/1000) < 1800){
-          // DO NOTHING, DO NOT REFRESH          
-        } else {
-          // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
-        }
-      }
-    }
+//       axios.post(this.state.endpoints.refreshJWT,payload)
+//       .then(response =>{
+//         this.commit('updateToken',response.data.token)
+//       })
+//       .catch(error =>{
+//         console.log(error)
+//       })
+//     },
+//     inspectToken(){
+//       const token = this.state.jwt;
+//       if(token){
+//         const decoded = jwt_decode(token);
+//         const exp = decoded.exp
+//         const orig_iat = decoded.orig_iat
+//         if(exp - (Date.now()/1000) < 1800 && (Date.now()/1000) - orig_iat < 628200){
+//           this.dispatch('refreshToken')
+//         } else if (exp -(Date.now()/1000) < 1800){
+//           // DO NOTHING, DO NOT REFRESH          
+//         } else {
+//           // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+//         }
+//       }
+//     }
 
-  }
-})
+//   }
+// })

@@ -75,10 +75,10 @@ def api_post_delete(request,id):
 
 @api_view(['POST'])
 def api_post_create(request):
-    print(request.data)
+    print("username",request.data['username'])
 
     permission_classes = (IsAuthenticated,)
-    user = User.objects.get(username="admin")
+    user = User.objects.get(username=request.data['username'])
  
     print(user)
     post = Post(Author=user)
@@ -90,6 +90,23 @@ def api_post_create(request):
             serializer.save()
             return Response(serializer.data,status = status.HTTP_201_CREATED)
         return Response(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def bookmarkapi(request):
+    b,created = Bookmark.objects.get_or_create(user=request.data['username'])
+    post = get_object_or_404(Post,id=request.data['id'])
+ 
+    if post in b.post.all():  
+        b.post.remove(post)
+        b.save()
+        bookmarkstatus = False
+
+    else:
+        b.post.add(post)
+        b.save()
+        bookmarkstatus = True
+    
+    return Response(bookmarkstatus,status = status.HTTP_201_CREATED)
 
 
 class PostList(generics.RetrieveAPIView):

@@ -3,6 +3,8 @@ import Listing from './components/Listing'
 import Details from './components/Details'
 import Create from './components/Create'
 
+import Login from './components/accounts/Login'
+
 
 
 const  routes=[
@@ -20,6 +22,12 @@ const  routes=[
         name:'create',
         path:'/create',
         component:Create
+    },
+
+    {
+        name:'login',
+        path:'/login',
+        component:Login
     }
 ]
 const router = new VueRouter({
